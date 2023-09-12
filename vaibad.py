@@ -1,5 +1,7 @@
 import sys
+import time
 
+startTime = time.time()
 
 f = open("vaipsis.txt", "r")
 readRaw = f.readlines()
@@ -12,32 +14,41 @@ if CarpetCount > 3 or CarpetCount < 1:
     print("Amount of carpets has to be between 1-3")
     sys.exit()
 
+roomGrid = []
+gridX = int(Room[2]) #east to west size
+gridY = int(Room[1]) #north to south size
+Area = gridX * gridY # area of room
 
-ETW = int(Room[1]) #east to west size
-NTS = int(Room[2]) #north to south size
-Area = ETW * NTS # area of room
+for row in range(gridX):
+    for column in range(gridY):
+        roomGrid.append((row, column))
 
+carpetGrid = []
 
+totalCarpet = []
 
-
-
-
-
-
-
-with open("vaipsis.txt", "r") as f:
-    for i, line in enumerate(f.readlines(), 0):
+with open("vaipsis.txt", "r") as input:
+    for i, line in enumerate(input.readlines(), 0):
         if i >= 1:
-            print(line)
             CarpetSize = line.split()
-            y = int(Room[1]) - int(CarpetSize[0]) - int(CarpetSize[1])
-            x = int(Room[2]) - int(CarpetSize[2]) - int(CarpetSize[3])
-            cArea = x * y
-            print(cArea)
-            
+            carpetXlen = gridX - int(CarpetSize[0]) - int(CarpetSize[1])
+            carpetYlen = gridY - int(CarpetSize[2]) - int(CarpetSize[3])
+            for x in range(carpetXlen):
+                for y in range(carpetYlen):
+                    carpetGrid.append((x + int(CarpetSize[0]), y + int(CarpetSize[3])))
+            for CarpetCoordinates in roomGrid:
+                for CarpetCoordinates in carpetGrid:
+                    if CarpetCoordinates not in totalCarpet:
+                        totalCarpet.append(CarpetCoordinates)
 
-            
+with open("vaipval.txt", "w") as output:
+    output.write(str(len(totalCarpet)))
 
+endTime = time.time()
+print(endTime - startTime)
+
+
+           
 
 
 
